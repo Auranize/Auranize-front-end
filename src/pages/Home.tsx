@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       user: {
         name: 'John Doe',
         username: 'johndoe',
-        avatar: 'https://i.pravatar.cc/100?img=5'
+        avatar: ''
       },
       content: 'Hello, this is a sample post!',
       image: null,
@@ -48,7 +48,7 @@ const Home: React.FC = () => {
         user: {
           name: 'You',
           username: 'you',
-          avatar: 'https://i.pravatar.cc/100?img=10' // or emoji/avatar string
+          avatar: '' // or emoji/avatar string
         },
         content: newPost,
         image: null,
