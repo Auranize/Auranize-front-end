@@ -1,64 +1,73 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import Header from '../components/Header';
-import CreatePost from '../components/CreatePost';
-import Post from '../components/Post';
+import  { useState } from 'react';
+
+type User = {
+  name: string;
+  username: string;
+  avatar: string;
+};
+
+type Post = {
+  id: number;
+  user: User;
+  content: string;
+  image: string | null;
+  likes: number;
+  comments: number;
+  shares: number;
+  timestamp: string;
+};
 
 const Home = () => {
-  const [activeTab, setActiveTab] = useState('home');
-  const [newPost, setNewPost] = useState('');
-  const [posts, setPosts] = useState([
-    // your sample posts here...
+  const [posts, setPosts] = useState<Post[]>([
+    {
+      id: 1,
+      user: {
+        name: 'John Doe',
+        username: '@johndoe',
+        avatar: 'https://example.com/avatar.jpg',
+      },
+      content: 'Hello, this is a post!',
+      image: null,
+      likes: 10,
+      comments: 5,
+      shares: 2,
+      timestamp: '2h ago',
+    },
   ]);
 
-  const handlePost = () => {
-    if (newPost.trim()) {
-      const newPostData = {
-        id: posts.length + 1,
-        user: { name: 'You', username: 'you', avatar: '😊' },
-        content: newPost,
-        image: null,
-        likes: 0,
-        comments: 0,
-        shares: 0,
-        timestamp: 'now'
-      };
-      setPosts([newPostData, ...posts]);
-      setNewPost('');
-    }
-  };
-
-  const handleLike = (id: number) => {
-    setPosts(posts.map((post) => post.id === id ? { ...post, likes: post.likes + 1 } : post));
+  const handleLike = (postId: number) => {
+    setPosts(prev =>
+      prev.map(post =>
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="flex-1 flex flex-col">
-        <Header activeTab={activeTab} />
-        <main className="flex-1 overflow-y-auto">
-          {activeTab === 'home' && (
-            <div className="max-w-2xl mx-auto py-6 px-4">
-              <CreatePost newPost={newPost} setNewPost={setNewPost} handlePost={handlePost} />
-              <div className="space-y-6">
-                {posts.map((post) => (
-                  <Post key={post.id} post={post} onLike={handleLike} />
-                ))}
-              </div>
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Feed</h1>
+      {posts.map(post => (
+        <div key={post.id} className="mb-4 border p-3 rounded">
+          <div className="flex items-center gap-2 mb-2">
+            <img
+              src={post.user.avatar}
+              alt={post.user.name}
+              className="w-8 h-8 rounded-full"
+            />
+            <div>
+              <p className="font-semibold">{post.user.name}</p>
+              <p className="text-sm text-gray-500">{post.timestamp}</p>
             </div>
-          )}
-          {activeTab !== 'home' && (
-            <div className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <div className="text-6xl mb-4">🚧</div>
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">Coming Soon</h3>
-                <p className="text-gray-500">The {activeTab} section is under development.</p>
-              </div>
-            </div>
-          )}
-        </main>
-      </div>
+          </div>
+          <p>{post.content}</p>
+          <button
+            className="text-blue-500 mt-2"
+            onClick={() => handleLike(post.id)}
+          >
+            ❤️ {post.likes}
+          </button>
+        </div>
+      ))}
     </div>
   );
 };
