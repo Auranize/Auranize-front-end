@@ -1,9 +1,31 @@
-// components/Post.tsx
 import React from 'react';
-import { Heart, MessageCircle, Share, Bookmark, MoreHorizontal } from 'lucide-react';
+import {
+  Heart,
+  MessageCircle,
+  Share,
+  Bookmark,
+  MoreHorizontal,
+} from 'lucide-react';
+
+type User = {
+  name: string;
+  username: string;
+  avatar: string;
+};
+
+type PostType = {
+  id: number;
+  user: User;
+  content: string;
+  image: string | null;
+  likes: number;
+  comments: number;
+  shares: number;
+  timestamp: string;
+};
 
 type PostProps = {
-  post: any;
+  post: PostType;
   onLike: (postId: number) => void;
 };
 
@@ -16,7 +38,9 @@ const Post: React.FC<PostProps> = ({ post, onLike }) => (
         </div>
         <div className="ml-3">
           <h3 className="font-semibold text-gray-900">{post.user.name}</h3>
-          <p className="text-sm text-gray-500">@{post.user.username} · {post.timestamp}</p>
+          <p className="text-sm text-gray-500">
+            @{post.user.username} · {post.timestamp}
+          </p>
         </div>
       </div>
       <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full">
@@ -33,7 +57,10 @@ const Post: React.FC<PostProps> = ({ post, onLike }) => (
     )}
 
     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-      <button onClick={() => onLike(post.id)} className="flex items-center space-x-2 text-gray-500 hover:text-red-500 group">
+      <button
+        onClick={() => onLike(post.id)}
+        className="flex items-center space-x-2 text-gray-500 hover:text-red-500 group"
+      >
         <div className="p-2 rounded-full group-hover:bg-red-50">
           <Heart className="w-5 h-5" />
         </div>
